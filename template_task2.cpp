@@ -24,76 +24,74 @@ class Deque
 {
 public:
 
-   Deque(){}                                          //-конструктор по умолчанию, т.е. без параметров;
+ Deque(){}                                          //-конструктор по умолчанию, т.е. без параметров;
 
 
-    bool Empty() const                                //константный метод Empty, т.е. он не может менять члены  класса Deque;
-    {
-        return item.empty();                          //возвращает true, если дек не содержит ни одного элемента;
-    }
+bool Empty() const                                //константный метод Empty, т.е. он не может менять члены  класса Deque;
+{
+ return item.empty();                          //возвращает true, если дек не содержит ни одного элемента;
+}
+
+size_t Size() const                               //константный метод Size, // без const версии метода была бы ошибка компиляции;
+{
+ return item.size();                           //возвращает количество элементов в деке;
+}
 
 
-    size_t Size() const                               //константный метод Size, // без const версии метода была бы ошибка компиляции;
-    {
-        return item.size();                           //возвращает количество элементов в деке;
-    }
+const void At(size_t index) const                   //константный метод даёт возможность защитить значение переменной от изменений;
+{
+ if (index >= item.size())                       //генерит стандартное исключение out_of_range,
+ throw out_of_range("Oops! Range error\n");  //если индекс больше или равен количеству элементов в деке;
+}
 
 
-    const void At(size_t index) const                   //константный метод даёт возможность защитить значение переменной от изменений;
-    {
-        if (index >= item.size())                       //генерит стандартное исключение out_of_range,
-            throw out_of_range("Oops! Range error\n");  //если индекс больше или равен количеству элементов в деке;
-    }
+void At(size_t index)                                //неконстантный метод
+{
+  if (index >= item.size())                        //генерит стандартное исключение out_of_range,
+  throw out_of_range("Oops! Range error\n");   //если индекс больше или равен количеству элементов в деке;
+}
 
+const T& operator[](size_t index) const
+{
+  if (index < this->Size())  return item[index];
+  else this->At(index);
+}
 
-    void At(size_t index)                                //неконстантный метод
-    {
-        if (index >= item.size())                        //генерит стандартное исключение out_of_range,
-            throw out_of_range("Oops! Range error\n");   //если индекс больше или равен количеству элементов в деке;
-    }
+T& operator[](size_t index) const
+{
+  if (index < this->Size()) return item[index];
+  else this->At(index);
+}
 
+const T &Front() const                                    //константные методы Front и Back, возвращают ссылки на первый
+{                                                         //и последний элемент дека соответственно;
+  return item.front();
+}
 
-    const T& operator[](size_t index) const
-    {
-        if (index < this->Size())  return item[index];
-        else this->At(index);
-    }
+const T &Back() const
+{
+  return item.back();
+}
 
-    T& operator[](size_t index)
-    {
-        if (index < this->Size()) return item[index];
-        else this->At(index);
-    }
+ T &Front()                                                 //неконстантные методы Front и Back, возвращают ссылки на первый
+ {                                                          //и последний элемент дека соответственно;
+   return item.front();
+ }
 
-    const T &Front() const                                    //константные методы Front и Back, возвращают ссылки на первый
-    {                                                         //и последний элемент дека соответственно;
-        return item.front();
-    }
+ T &Back()
+ {
+   return item.back();
+ }
 
-    const T &Back() const
-    {
-        return item.back();
-    }
+ void PushFront(T const& value)                               //метод PushFront - метод, который будет выдвигать элемент в начало списка;
+ {
+   item.insert(item.begin(), value);
+ }
 
-    T &Front()                                                 //неконстантные методы Front и Back, возвращают ссылки на первый
-    {                                                          //и последний элемент дека соответственно;
-        return item.front();
-    }
-
-    T &Back()
-    {
-        return item.back();
-    }
-
-    void PushFront(T const& value)                               //метод PushFront - метод, который будет выдвигать элемент в начало списка;
-    {
-       item.insert(item.begin(), value);
-    }
-
-    void PushBack(T const& value)                                //метод PushBack - вставляет элемент в конец деки;
-    {
-       item.push_back(value);
-    }
+  void PushBack(T const& value)                                //метод PushBack - вставляет элемент в конец деки;
+  {
+   item.push_back(value);
+  }
 
 private:
    vector<T> item;
